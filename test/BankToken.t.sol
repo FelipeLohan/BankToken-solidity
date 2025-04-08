@@ -18,9 +18,15 @@ contract BankTokenTest is Test {
   address defaultOwner = address(1);
   address minter = address(3);
   uint256 initialSupply = 1000 * 1e18; //max decimals
+
+  function setUp() public {
+    cheats.startPrank(defaultOwner);
+    btk = new BankToken(defaultOwner, initialSupply);
+  }
+
+  function testInitialSetup() public view {
+      assertEq(btk.owner(), defaultOwner, "The owner needed to describle in contract");
+      assertEq(btk.totalSupply(), initialSupply, "The supply needed to be Equals in inicialization contract");
+  }
 }
 
-function setUp() public {
-  cheats.startPrank(defaultOwner);
-  btk = new BankToken(defaultOwner, initialSupply)
-}

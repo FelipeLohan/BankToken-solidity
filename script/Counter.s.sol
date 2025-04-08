@@ -2,17 +2,17 @@
 pragma solidity ^0.8.13;
 
 import {Script, console} from "forge-std/Script.sol";
-import {Counter} from "../src/Counter.sol";
+import {BankToken} from "../src/BankToken.sol";
 
-contract CounterScript is Script {
-    Counter public counter;
+contract BankTokenScript is Script {
+    BankToken public bankToken;
 
     function setUp() public {}
 
     function run() public {
         vm.startBroadcast();
 
-        counter = new Counter();
+        bankToken = new BankToken(address(this), 1_000 ether);
 
         vm.stopBroadcast();
     }
