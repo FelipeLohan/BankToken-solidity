@@ -28,5 +28,43 @@ contract BankTokenTest is Test {
       assertEq(btk.owner(), defaultOwner, "The owner needed to describle in contract");
       assertEq(btk.totalSupply(), initialSupply, "The supply needed to be Equals in inicialization contract");
   }
+
+  function testMint() public {
+        // Arrange
+        address recipient = address(89);
+        uint256 mintAmount = 500 * 1e18;
+
+        // Act
+        btk.mint(recipient, mintAmount);
+
+        uint256 newBalance = btk.balanceOf(recipient);
+        uint256 newSupply = initialSupply + mintAmount;
+        cheats.stopPrank();
+
+        // Assert
+        assertEq(newBalance, mintAmount, "Saldo do recipient nao esta batendo");
+        assertEq(btk.totalSupply(), newSupply, "A supply esta diferente do que deveria");
+  }
+
+  function testTransfer() public {
+        // Arrange
+        address recipient = address(87);
+        uint256 transferAmount = 100 * 1e18;
+
+        // Act
+        uint256 senderOldBalance = btk.balanceOf(defaultOwner);
+        uint256 recipientOldBalance = btk.balanceOf(recipient);
+
+        cheats.startPrank(defaultOwner);
+        btk.transfer(recipient, transferAmount);
+        cheats.stopPrank();
+
+        uint256 senderNewBalance = btk.balanceOf(defaultOwner);
+        uint256 recipientNewBalance = btk.balanceOf(recipient);
+
+        // Assert
+        assertEq(senderNewBalance, senderOldBalance - transferAmount, "Balanco sender invalido");
+        assertEq(recipientNewBalance, recipientOldBalance + transferAmount, "Balanco recipient invalido");
+  }
 }
 
